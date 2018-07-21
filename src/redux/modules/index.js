@@ -1,6 +1,6 @@
 export {
-  default as audioPlayer, playTrack, pauseTrack, stopTrack,
+  default as audioPlayer, startTrack, pauseTrack, stopTrack,
 } from './audioPlayer';
-export { default as playlist, addTrack, deleteTrack } from './playlists';
+export { default as playlists, addTrack, deleteTrack } from './playlists';
 
 // export { default as audioPlayer } from './audioPlayer';

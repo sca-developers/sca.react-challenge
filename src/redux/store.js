@@ -2,11 +2,11 @@ import {
   createStore, compose, combineReducers, applyMiddleware,
 } from 'redux';
 import thunk from 'redux-thunk';
-import { audioPlayer, playlist } from './modules';
+import { audioPlayer, playlists } from './modules';
 
 // Create Redux Store
 const store = createStore(
-  combineReducers({ playlist, audioPlayer }),
+  combineReducers({ audioPlayer, playlists }),
   compose(
     applyMiddleware(thunk),
     window.devToolsExtension ? window.devToolsExtension() : f => f
