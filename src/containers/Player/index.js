@@ -6,9 +6,10 @@ import { Link } from 'react-router-dom';
 import Timer from '../../components/Timer';
 import Button from '../../components/Button';
 import { startTrack, pauseTrack, stopTrack } from '../../redux/modules';
-import Playlist from './playlist.js';
+import Playlist from '../Playlist';
+import formatTime from '../../components/utils/formatTime.js';
 
-
+// Display the audio player
 class Player extends Component {
   static propTypes = {
     selectedRef: PropTypes.object,
@@ -16,6 +17,7 @@ class Player extends Component {
     isPaused: PropTypes.bool,
     isStopped: PropTypes.bool,
     elapsedTime: PropTypes.number,
+    duration: PropTypes.number,
     start: PropTypes.func,
     pause: PropTypes.func,
     stop: PropTypes.func,
@@ -27,6 +29,7 @@ class Player extends Component {
     isPaused: false,
     isStopped: false,
     elapsedTime: 0,
+    duration: 0,
     start: () => {},
     pause: () => {},
     stop: () => {},
@@ -44,7 +47,10 @@ class Player extends Component {
   play = () => {
     const { start } = this.props;
     this.player.play();
-    start(this.player.currentTime);
+    start({
+      elapsedTime: this.player.currentTime,
+      duration: this.player.duration,
+    });
     this.setState({
       disablePlay: true,
       disablePause: false,
@@ -78,7 +84,7 @@ class Player extends Component {
 
   render() {
     const {
-      selectedRef, elapsedTime, isStarted, isPaused, isStopped,
+      selectedRef, elapsedTime, duration, isStarted, isPaused, isStopped,
     } = this.props;
     const { disablePlay, disablePause, disableStop } = this.state;
     return (
@@ -104,7 +110,7 @@ class Player extends Component {
               </div>
               <div className="player-controls-title">
                 Controls
-                <audio ref={(el) => { this.player = el; }}>
+                <audio onEnded={() => this.stop()} ref={(el) => { this.player = el; }}>
                   <track kind="captions" />
                   <source src={selectedRef.source} type="audio/mp3" />
                   <p>Your browser doesnt support HTML5 audio.</p>
@@ -136,6 +142,12 @@ class Player extends Component {
                   elapsedTime={elapsedTime}
                 />
               </div>
+              <div>
+                <div className="player-duration-title">
+                Duration
+                </div>
+                <div className="player-duration">{formatTime(duration)}</div>
+              </div>
             </div>
           )
         }
@@ -155,12 +167,13 @@ const mapStateToProps = (state) => {
   const {
     playlists: { selectedRef },
     audioPlayer: {
-      elapsedTime, isStarted, isPaused, isStopped,
+      elapsedTime, duration, isStarted, isPaused, isStopped,
     },
   } = state;
   return {
     selectedRef,
     elapsedTime,
+    duration,
     isStarted,
     isPaused,
     isStopped,

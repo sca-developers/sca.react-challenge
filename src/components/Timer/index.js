@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import formatTime from '../utils/formatTime';
 
+// Re-useable timer component. Can start incrementing from a given time reference.
 class Timer extends React.Component {
   static propTypes = {
     isStarted: PropTypes.bool,
@@ -30,29 +32,29 @@ class Timer extends React.Component {
 
     if (isStarted && !isPaused) {
       this.start(nextProps);
-    }
-    if (isPaused) {
+    } else if (isPaused) {
       this.paused(nextProps);
-    }
-
-    if (isStopped) {
-      this.stop(nextProps);
+    } else if (isStopped) {
+      this.stop();
     }
   }
 
+  // Only re-renders when timer starts and during uninterrupted play
   shouldComponentUpdate(nextProps, nextState) {
     const { isStarted, isPaused, seconds } = this.state;
     const isStartedChanged = nextState.isStarted !== isStarted;
+    const timeChanged = nextState.seconds !== seconds;
     if ((isStartedChanged) && !isPaused) return true;
-    if (nextState.seconds !== seconds) return true;
-
+    if (timeChanged) return true;
     return false;
   }
 
+  // Reset timer when component unmounts
   componentWillUnmount() {
     this.stop();
   }
 
+  // Set seconds on timer
   startTimer = () => {
     this.timer = setInterval(() => {
       const { seconds } = this.state;
@@ -62,22 +64,14 @@ class Timer extends React.Component {
     }, 1000);
   };
 
-  // resumeTimer = (elapsedTime) => {
-  //   console.log('elapsedTime', elapsedTime);
-  //   console.log('math', Math.floor(elapsedTime));
-  //   const millisTillNextSecond = (1 - (elapsedTime - Math.floor(elapsedTime)))*1000;
-  //   console.log('millisTillNextSecond', millisTillNextSecond);
-  //   this.timer = setTimeout(() => {
-  //     this.startTimer();
-  //   }, millisTillNextSecond);
-  // };
-
+  // Start timer
   start = (nextProps) => {
     const { isStarted } = nextProps;
     this.setState({ isStarted });
     this.startTimer();
   }
 
+  // Pause timer and reset interval. Timer gets new time reference from player after play resume.
   paused = (nextProps) => {
     const { isPaused, elapsedTime } = nextProps;
     this.setState({
@@ -87,6 +81,7 @@ class Timer extends React.Component {
     clearInterval(this.timer);
   }
 
+  // Stop timer
   stop = () => {
     this.setState({
       isStarted: false,
@@ -96,17 +91,11 @@ class Timer extends React.Component {
     clearInterval(this.timer);
   }
 
-  formatTime = (seconds) => {
-    const date = new Date(null);
-    date.setSeconds(seconds); // specify value for SECONDS here
-    return date.toISOString().substr(11, 8);
-  }
-
   render() {
     const { seconds } = this.state;
     return (
       <div>
-        <div className="player-timer">{this.formatTime(seconds)}</div>
+        <div className="player-timer">{formatTime(seconds)}</div>
       </div>
     );
   }

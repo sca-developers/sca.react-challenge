@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Input } from '../../components/Input';
+import Input from '../../components/Input';
 import { addTrack, deleteTrack } from '../../redux/modules';
 
-// THIS COMPONENT WILL NEED A REDUX ACTION
-// TO ADD THE SOURCE INTO THE STORE FOR THE PLAYER
-
+// Upload audio track. Can upload mulitple tracks to create a playlist.
 class UploadTrack extends Component {
   static propTypes = {
     add: PropTypes.func,
@@ -36,8 +34,8 @@ class UploadTrack extends Component {
 
   renderPlaylist = sourceRef => (
     <div className="upload-table">
-      <div className="upload-title">Current Playlist.</div>
-      <div>Feel free to add more to the playlist</div>
+      <div className="upload-title">Uploaded Tracks</div>
+      <div>Feel free to add more to the playlist (Note: You cant add the same file if it was the previously selected file)</div>
       <ul className="upload-wrapper">
         {sourceRef.map((item, index) => <li className="upload-list" key={item.timestamp}> Track {index}: {item.name}</li>)}
       </ul>

@@ -1,8 +1,8 @@
-// theirs
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function Button(props) {
+// Re-useable button component. Can be displayed in two styles, disable and enable.
+const Button = (props) => {
   const { disable, callback, text } = props;
   return (
     <button
@@ -13,7 +13,7 @@ function Button(props) {
       {text}
     </button>
   );
-}
+};
 
 Button.propTypes = {
   text: PropTypes.string,

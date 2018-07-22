@@ -10,7 +10,7 @@ const Nav = function () {
           <Link to="/">Home</Link>
         </li>
         <li className="nav-list">
-          <Link to="/upload">Upload</Link>
+          <Link to="/upload">Upload Files</Link>
         </li>
         <li className="nav-list">
           <Link to="/player">Player</Link>

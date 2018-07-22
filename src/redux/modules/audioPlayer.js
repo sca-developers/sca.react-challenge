@@ -1,14 +1,12 @@
 
 
-// PLACE YOUR ACTIONS HERE:
-
-// Player Control
+// Player Control Actions
 const START_TRACK = 'START_TRACK';
 const PAUSE_TRACK = 'PAUSE_TRACK';
 const STOP_TRACK = 'STOP_TRACK';
 
 
-// PLACE YOUR ACTION CREATORS HERE:
+// Player Control Actions Creators
 export function startTrack(payload) {
   return { type: START_TRACK, payload };
 }
@@ -24,18 +22,20 @@ export function stopTrack() {
 
 const initialState = {
   elapsedTime: 0,
+  duration: 0,
   isStarted: false,
   isPaused: false,
   isStopped: false,
 };
 
-// PLACE YOUR REDUCERS HERE:
+// Player Control Reducers:
 const audioPlayer = (state = initialState, action) => {
   switch (action.type) {
     case START_TRACK:
       return {
         ...state,
-        elapsedTime: action.payload,
+        elapsedTime: action.payload.elapsedTime,
+        duration: action.payload.duration,
         isStarted: true,
         isPaused: false,
         isStopped: false,
@@ -50,6 +50,7 @@ const audioPlayer = (state = initialState, action) => {
       return {
         ...state,
         elapsedTime: 0,
+        duration: 0,
         isStarted: false,
         isPaused: false,
         isStopped: true,

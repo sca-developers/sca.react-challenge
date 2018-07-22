@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { selectTrack, stopTrack } from '../../redux/modules';
 
-
+// Display current playlist
 class Playlist extends Component {
   static propTypes = {
     sourceRef: PropTypes.array,
@@ -20,7 +20,8 @@ class Playlist extends Component {
     stopPlayer: () => {},
   };
 
-  playTrack = (e, timestamp) => {
+  // change selected track to the one that has been clicked on the playlist
+  selectTrack = (e, timestamp) => {
     const {
       sourceRef, select, stop, stopPlayer,
     } = this.props;
@@ -38,7 +39,7 @@ class Playlist extends Component {
         {sourceRef.map(item => (
           <button
             type="button"
-            onClick={e => this.playTrack(e, item.timestamp)}
+            onClick={e => this.selectTrack(e, item.timestamp)}
             className="playlist-button"
             key={item.timestamp}
           >

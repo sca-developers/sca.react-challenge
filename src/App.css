@@ -36,7 +36,6 @@ pre {
 }
 
 /* Nav */
-
 .nav-wrapper {
   margin-bottom: 40px;
   border-bottom: 5px solid black
@@ -54,6 +53,7 @@ pre {
 
 .upload-title {
   font-size: 22px;
+  margin-bottom: 20px;
 }
 
 .upload-wrapper {
@@ -80,7 +80,8 @@ pre {
 .player-selected-title,
 .playlist-title,
 .player-controls-title,
-.player-timer-title {
+.player-timer-title,
+.player-duration-title {
   color: green;
   font-size: 22px;
   margin: 30px 0px 10px;
@@ -96,6 +97,7 @@ pre {
   cursor: pointer;
 }
 
-.player-timer {
+.player-timer,
+.player-duration {
   font-size: 50px;
 }

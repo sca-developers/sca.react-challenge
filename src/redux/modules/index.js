@@ -4,5 +4,3 @@ export {
 export {
   default as playlists, addTrack, selectTrack, deleteTrack,
 } from './playlists';
-
-// export { default as audioPlayer } from './audioPlayer';

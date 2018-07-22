@@ -2,10 +2,10 @@ import React from 'react';
 import Player from '../../containers/Player';
 
 const View = () => (
-  <div>
-    <h1>This is my awesome player</h1>
+  <React.Fragment>
+    <h1>Awesome Audio Player</h1>
     <Player />
-  </div>
+  </React.Fragment>
 );
 
 export default View;

@@ -2,10 +2,10 @@ import React from 'react';
 import UploadFile from '../../containers/UploadTrack';
 
 const Upload = () => (
-  <div>
+  <React.Fragment>
     <h1>Upload Audio</h1>
     <UploadFile />
-  </div>
+  </React.Fragment>
 );
 
 export default Upload;

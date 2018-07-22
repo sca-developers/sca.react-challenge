@@ -17,7 +17,7 @@ const NotFound404 = () => (
 
 const App = () => (
   <BrowserRouter>
-    <div>
+    <React.Fragment>
       <Nav />
       <Switch>
         <Route exact path="/" component={Home} />
@@ -25,7 +25,7 @@ const App = () => (
         <Route exact path="/upload" component={Upload} />
         <Route component={NotFound404} />
       </Switch>
-    </div>
+    </React.Fragment>
   </BrowserRouter>
 );
 
