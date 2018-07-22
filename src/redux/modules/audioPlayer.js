@@ -13,8 +13,8 @@ export function startTrack(payload) {
   return { type: START_TRACK, payload };
 }
 
-export function pauseTrack() {
-  return { type: PAUSE_TRACK };
+export function pauseTrack(payload) {
+  return { type: PAUSE_TRACK, payload };
 }
 
 export function stopTrack() {
@@ -23,8 +23,10 @@ export function stopTrack() {
 
 
 const initialState = {
-  currentTime: null,
-  elapsedTime: null,
+  elapsedTime: 0,
+  isStarted: false,
+  isPaused: false,
+  isStopped: false,
 };
 
 // PLACE YOUR REDUCERS HERE:
@@ -33,17 +35,24 @@ const audioPlayer = (state = initialState, action) => {
     case START_TRACK:
       return {
         ...state,
-        currentTime: action.payload,
+        elapsedTime: action.payload,
+        isStarted: true,
+        isPaused: false,
+        isStopped: false,
       };
     case PAUSE_TRACK:
       return {
         ...state,
-        currentTime: null,
+        elapsedTime: action.payload,
+        isPaused: true,
       };
     case STOP_TRACK:
       return {
         ...state,
-        currentTime: null,
+        elapsedTime: 0,
+        isStarted: false,
+        isPaused: false,
+        isStopped: true,
       };
     default:
       return state;

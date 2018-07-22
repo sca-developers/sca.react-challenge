@@ -1,15 +1,52 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class Timer extends React.Component {
+  static propTypes = {
+    isStarted: PropTypes.bool,
+    isPaused: PropTypes.bool,
+    isStopped: PropTypes.bool,
+    elapsedTime: PropTypes.number,
+  }
+
+  static defaultProps = {
+    isStarted: false,
+    isPaused: false,
+    isStopped: false,
+    elapsedTime: 0,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
-      seconds: props.startTime,
+      isStarted: false,
+      isPaused: false,
+      seconds: props.elapsedTime || 0,
     };
   }
 
-  componentDidMount() {
-    this.start();
+  componentWillReceiveProps(nextProps) {
+    const { isStarted, isPaused, isStopped } = nextProps;
+
+    if (isStarted && !isPaused) {
+      this.start(nextProps);
+    }
+    if (isPaused) {
+      this.paused(nextProps);
+    }
+
+    if (isStopped) {
+      this.stop(nextProps);
+    }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const { isStarted, isPaused, seconds } = this.state;
+    const isStartedChanged = nextState.isStarted !== isStarted;
+    if ((isStartedChanged) && !isPaused) return true;
+    if (nextState.seconds !== seconds) return true;
+
+    return false;
   }
 
   componentWillUnmount() {
@@ -17,27 +54,48 @@ class Timer extends React.Component {
   }
 
   startTimer = () => {
-    this.timer = setTimeout(() => {
-      if (!this.stopped) this.startTimer();
-      this.setState({ seconds: this.state.seconds + 1 });
+    this.timer = setInterval(() => {
+      const { seconds } = this.state;
+      this.setState({
+        seconds: seconds + 1,
+      });
     }, 1000);
   };
 
-  start() {
-    this.stopped = false;
+  // resumeTimer = (elapsedTime) => {
+  //   console.log('elapsedTime', elapsedTime);
+  //   console.log('math', Math.floor(elapsedTime));
+  //   const millisTillNextSecond = (1 - (elapsedTime - Math.floor(elapsedTime)))*1000;
+  //   console.log('millisTillNextSecond', millisTillNextSecond);
+  //   this.timer = setTimeout(() => {
+  //     this.startTimer();
+  //   }, millisTillNextSecond);
+  // };
+
+  start = (nextProps) => {
+    const { isStarted } = nextProps;
+    this.setState({ isStarted });
     this.startTimer();
   }
 
-  stop = () => {
-    this.stopped = true;
-    clearTimeout(this.timer);
-  };
+  paused = (nextProps) => {
+    const { isPaused, elapsedTime } = nextProps;
+    this.setState({
+      isPaused,
+      seconds: elapsedTime,
+    });
+    clearInterval(this.timer);
+  }
 
-  resume = () => {
-    if (this.stopped) {
-      this.start();
-    }
-  };
+  stop = (nextProps) => {
+    const { isStarted, isPaused } = nextProps;
+    this.setState({
+      isPaused,
+      isStarted,
+      seconds: 0,
+    });
+    clearInterval(this.timer);
+  }
 
   formatTime = (seconds) => {
     const date = new Date(null);
@@ -46,9 +104,10 @@ class Timer extends React.Component {
   }
 
   render() {
+    const { seconds } = this.state;
     return (
       <div>
-        <div>{this.formatTime(this.state.seconds)}</div>
+        <div>{this.formatTime(seconds)}</div>
       </div>
     );
   }
