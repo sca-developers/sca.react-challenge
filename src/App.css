@@ -8,6 +8,96 @@ pre {
   margin: 0;
 }
 
-li {
-  margin: 0.5em 0;
+/* Button Component */
+.button {
+  width: 250px;
+  display: block;
+  border-radius: 6px;
+  height: 48px;
+  position: relative;
+  box-sizing: border-box;
+  padding:0;
+  margin-top:30px;
+  user-select: none;
+  outline: none;
+  }
+
+
+.disable.button {
+  color: black;
+  background-color: grey;
+  cursor:not-allowed;
+}
+
+.enable.button {
+  color: white;
+  background-color: red;
+  cursor: pointer;
+}
+
+/* Nav */
+.nav-wrapper {
+  margin-bottom: 40px;
+  border-bottom: 5px solid black
+}
+
+.nav-list {
+  padding: 15px;
+  display: inline-block;
+}
+
+/* Upload Page */
+.upload-table {
+  margin-top: 30px;
+}
+
+.upload-title {
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+.upload-wrapper {
+  width: 400px;
+}
+
+.upload-list {
+  color: white;
+  padding: 15px;
+}
+
+.upload-list:nth-child(odd) {
+  background-color: red;
+}
+.upload-list:nth-child(even) {
+  background-color: blue;
+}
+
+/* Player Page */
+
+.player-selected-track {
+  font-style: italic;
+}
+.player-selected-title,
+.playlist-title,
+.player-controls-title,
+.player-timer-title,
+.player-duration-title {
+  color: green;
+  font-size: 22px;
+  margin: 30px 0px 10px;
+}
+
+.playlist-button {
+  border: 0px;
+  border-top: 1px solid grey;
+  border-bottom: 1px solid grey;
+  padding: 15px;
+  margin-bottom: 10px;
+  display: block;
+  cursor: pointer;
+}
+
+.player-timer,
+.player-duration {
+  font-size: 50px;
 }
