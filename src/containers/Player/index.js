@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
 import Timer from '../../components/Timer';
+import Button from '../../components/Button';
 import { startTrack, pauseTrack, stopTrack } from '../../redux/modules';
 
 
@@ -30,16 +31,35 @@ class Player extends Component {
     stop: () => {},
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      disablePlay: false,
+      disablePause: true,
+      disableStop: true,
+    };
+  }
+
   play = () => {
     const { start } = this.props;
     this.player.play();
     start(this.player.currentTime);
+    this.setState({
+      disablePlay: true,
+      disablePause: false,
+      disableStop: false,
+    });
   }
 
   pause = () => {
     const { pause } = this.props;
     this.player.pause();
     pause(this.player.currentTime);
+    this.setState({
+      disablePlay: false,
+      disablePause: true,
+      disableStop: false,
+    });
   }
 
   stop = () => {
@@ -47,6 +67,11 @@ class Player extends Component {
     this.player.pause();
     this.player.currentTime = 0;
     stop();
+    this.setState({
+      disablePlay: false,
+      disablePause: true,
+      disableStop: true,
+    });
   }
 
 
@@ -54,7 +79,7 @@ class Player extends Component {
     const {
       sourceRef, elapsedTime, isStarted, isPaused, isStopped,
     } = this.props;
-    // const { isStarted } = this.state;
+    const { disablePlay, disablePause, disableStop } = this.state;
     return (
       <div>
         {!sourceRef
@@ -70,31 +95,29 @@ class Player extends Component {
               <audio controls ref={(el) => { this.player = el; }}>
                 <track kind="captions" />
                 <source src={sourceRef} type="audio/mp3" />
-                <p>Your browser doesnt support HTML5 audio.
-                </p>
+                <p>Your browser doesnt support HTML5 audio.</p>
               </audio>
-              <div>
-                <button type="button" onClick={() => this.play()}>
-                  PLAY
-                </button>
-              </div>
-              <div>
-                <button type="button" onClick={() => this.pause()}>
-                  PAUSE
-                </button>
-              </div>
-              <div>
-                <button type="button" onClick={() => this.stop()}>
-                  STOP
-                </button>
-              </div>
+              <Button
+                text="PLAY"
+                disable={disablePlay}
+                callback={disablePlay ? e => e.preventDefault() : () => this.play()}
+              />
+              <Button
+                text="PAUSE"
+                disable={disablePause}
+                callback={disablePause ? e => e.preventDefault() : () => this.pause()}
+              />
+              <Button
+                text="STOP"
+                disable={disableStop}
+                callback={disableStop ? e => e.preventDefault() :() => this.stop()}
+              />
               <div>
                 <Timer isStarted={isStarted} isPaused={isPaused} isStopped={isStopped} elapsedTime={elapsedTime} />
               </div>
             </div>
           )
         }
-
       </div>
     );
   }

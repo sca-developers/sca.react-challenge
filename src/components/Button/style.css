@@ -1,0 +1,27 @@
+
+
+.button {
+  width: 250px;
+  display: block;
+  border-radius: 6px;
+  height: 48px;
+  position: relative;
+  box-sizing: border-box;
+  padding:0;
+  margin-top:30px;
+  user-select: none;
+  outline: none;
+  }
+
+
+.disable.button {
+  color: black;
+  background-color: grey;
+  cursor:not-allowed;
+}
+
+.enable.button {
+  color: white;
+  background-color: red;
+  cursor: pointer;
+}
