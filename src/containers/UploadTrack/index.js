@@ -11,6 +11,12 @@ import { addTrack, deleteTrack } from '../../redux/modules';
 class UploadTrack extends Component {
   static propTypes = {
     add: PropTypes.func,
+    sourceRef: PropTypes.array,
+  }
+
+  static defaultProps = {
+    add: () => {},
+    sourceRef: [],
   }
 
   onUpload = (e) => {
@@ -18,19 +24,33 @@ class UploadTrack extends Component {
     const audioFile = e.target.files;
     if (audioFile && audioFile.length > 0) {
       const targetFile = audioFile[0];
+      const { name } = audioFile[0];
       try {
         const source = URL.createObjectURL(targetFile);
-        add(source);
+        add(source, name);
       } catch (error) {
         console.error(error);
       }
     }
   }
 
+  renderPlaylist = sourceRef => (
+    <div className="upload-table">
+      <div className="upload-title">Current Playlist.</div>
+      <div>Feel free to add more to the playlist</div>
+      <ul className="upload-wrapper">
+        {sourceRef.map((item, index) => <li className="upload-list" key={item.timestamp}> Track {index}: {item.name}</li>)}
+      </ul>
+    </div>
+  )
+
   render() {
-    console.log('props', this.props);
+    const { sourceRef } = this.props;
     return (
-      <Input type="file" onChange={e => this.onUpload(e)} />
+      <div>
+        <Input type="file" onChange={e => this.onUpload(e)} />
+        {sourceRef.length > 0 ? this.renderPlaylist(sourceRef) : null}
+      </div>
     );
   }
 }
@@ -40,7 +60,10 @@ const mapDispatchToProps = dispatch => ({
   delete: bindActionCreators(deleteTrack, dispatch),
 });
 
-const mapStateToProps = state => state;
+const mapStateToProps = (state) => {
+  const { playlists: { sourceRef } } = state;
+  return { sourceRef };
+};
 
 export default connect(
   mapStateToProps,

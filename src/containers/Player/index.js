@@ -6,11 +6,12 @@ import { Link } from 'react-router-dom';
 import Timer from '../../components/Timer';
 import Button from '../../components/Button';
 import { startTrack, pauseTrack, stopTrack } from '../../redux/modules';
+import Playlist from './playlist.js';
 
 
 class Player extends Component {
   static propTypes = {
-    sourceRef: PropTypes.string,
+    selectedRef: PropTypes.object,
     isStarted: PropTypes.bool,
     isPaused: PropTypes.bool,
     isStopped: PropTypes.bool,
@@ -21,7 +22,7 @@ class Player extends Component {
   }
 
   static defaultProps = {
-    sourceRef: null,
+    selectedRef: null,
     isStarted: false,
     isPaused: false,
     isStopped: false,
@@ -77,12 +78,12 @@ class Player extends Component {
 
   render() {
     const {
-      sourceRef, elapsedTime, isStarted, isPaused, isStopped,
+      selectedRef, elapsedTime, isStarted, isPaused, isStopped,
     } = this.props;
     const { disablePlay, disablePause, disableStop } = this.state;
     return (
       <div>
-        {!sourceRef
+        {!selectedRef
           ? (
             <div>You have not uploaded any files.
               <div>
@@ -92,28 +93,48 @@ class Player extends Component {
           )
           : (
             <div>
-              <audio controls ref={(el) => { this.player = el; }}>
-                <track kind="captions" />
-                <source src={sourceRef} type="audio/mp3" />
-                <p>Your browser doesnt support HTML5 audio.</p>
-              </audio>
-              <Button
-                text="PLAY"
-                disable={disablePlay}
-                callback={disablePlay ? e => e.preventDefault() : () => this.play()}
-              />
-              <Button
-                text="PAUSE"
-                disable={disablePause}
-                callback={disablePause ? e => e.preventDefault() : () => this.pause()}
-              />
-              <Button
-                text="STOP"
-                disable={disableStop}
-                callback={disableStop ? e => e.preventDefault() :() => this.stop()}
-              />
+              <Playlist stopPlayer={() => this.stop()} />
               <div>
-                <Timer isStarted={isStarted} isPaused={isPaused} isStopped={isStopped} elapsedTime={elapsedTime} />
+                <div className="player-selected-title">
+                  Current selected track
+                </div>
+                <div className="player-selected-track">
+                  {selectedRef.name}
+                </div>
+              </div>
+              <div className="player-controls-title">
+                Controls
+                <audio ref={(el) => { this.player = el; }}>
+                  <track kind="captions" />
+                  <source src={selectedRef.source} type="audio/mp3" />
+                  <p>Your browser doesnt support HTML5 audio.</p>
+                </audio>
+                <Button
+                  text="PLAY"
+                  disable={disablePlay}
+                  callback={disablePlay ? e => e.preventDefault() : () => this.play()}
+                />
+                <Button
+                  text="PAUSE"
+                  disable={disablePause}
+                  callback={disablePause ? e => e.preventDefault() : () => this.pause()}
+                />
+                <Button
+                  text="STOP"
+                  disable={disableStop}
+                  callback={disableStop ? e => e.preventDefault() :() => this.stop()}
+                />
+              </div>
+              <div>
+                <div className="player-timer-title">
+                Timer
+                </div>
+                <Timer
+                  isStarted={isStarted}
+                  isPaused={isPaused}
+                  isStopped={isStopped}
+                  elapsedTime={elapsedTime}
+                />
               </div>
             </div>
           )
@@ -132,13 +153,13 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = (state) => {
   const {
-    playlists: { sourceRef },
+    playlists: { selectedRef },
     audioPlayer: {
       elapsedTime, isStarted, isPaused, isStopped,
     },
   } = state;
   return {
-    sourceRef,
+    selectedRef,
     elapsedTime,
     isStarted,
     isPaused,

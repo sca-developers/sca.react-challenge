@@ -87,11 +87,10 @@ class Timer extends React.Component {
     clearInterval(this.timer);
   }
 
-  stop = (nextProps) => {
-    const { isStarted, isPaused } = nextProps;
+  stop = () => {
     this.setState({
-      isPaused,
-      isStarted,
+      isStarted: false,
+      isPaused: false,
       seconds: 0,
     });
     clearInterval(this.timer);
@@ -107,7 +106,7 @@ class Timer extends React.Component {
     const { seconds } = this.state;
     return (
       <div>
-        <div>{this.formatTime(seconds)}</div>
+        <div className="player-timer">{this.formatTime(seconds)}</div>
       </div>
     );
   }
